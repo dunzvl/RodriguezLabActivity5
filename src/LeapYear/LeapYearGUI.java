@@ -16,6 +16,7 @@ public class LeapYearGUI extends JFrame{
         app.setSize(400, 300);
         app.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         app.setVisible(true);
+        app.setLocationRelativeTo(null);
     }
 
     public LeapYearGUI() {
@@ -26,14 +27,26 @@ public class LeapYearGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
+                    if(tfYear.getText().isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
                     int year = Integer.parseInt(tfYear.getText());
+                    if(year < 0){
+                        throw new ArithmeticException();
+                    }
                     if (isLeapYear(year)) {
                         JOptionPane.showMessageDialog(null, "Leap year");
                     } else {
                         JOptionPane.showMessageDialog(null, "Not a leap year");
                     }
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Invalid year", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Field must only contain valid integer to be a year!", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null,"Field cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE );
+                } catch (ArithmeticException ex) {
+                    JOptionPane.showMessageDialog(null, "Year cannot be negative!", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Unknown Error!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

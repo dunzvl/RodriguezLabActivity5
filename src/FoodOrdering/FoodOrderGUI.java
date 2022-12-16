@@ -1,17 +1,16 @@
 package FoodOrdering;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
-public class FoodOrderGUI extends JFrame{
+public class FoodOrderGUI extends JFrame {
     private JPanel panel1;
     private JCheckBox cPizza, cBurger, cFries, cSoftDrinks, cTea, cSundae;
     private JRadioButton rbNone, rb5, rb10, rb15;
     private JButton btnOrder;
     private JLabel lblFoods, lblDiscount, lblPizza, lblBurger, lblFries, lblSoftDrinks, lblTea, lblSundae;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         FoodOrderGUI app = new FoodOrderGUI();
         app.setContentPane(app.panel1);
         app.setTitle("Food Ordering System");
@@ -21,7 +20,7 @@ public class FoodOrderGUI extends JFrame{
         app.setLocationRelativeTo(null);
     }
 
-    public FoodOrderGUI(){
+    public FoodOrderGUI() {
         lblFoods.setText("Foods");
         cPizza.setText("Pizza");
         cBurger.setText("Burger");
@@ -45,13 +44,13 @@ public class FoodOrderGUI extends JFrame{
         btnOrder.setText("Order");
         btnOrder.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent ae) {
                 try {
-                    double amount;
-                    if (!cPizza.isSelected() && !cBurger.isSelected() && !cFries.isSelected() && !cSoftDrinks.isSelected() && !cTea.isSelected() && !cSundae.isSelected()){
-                        throw new IllegalArgumentException("Please select at least one food item.");
+                    double amount, totalPrice = 0, discount = 0;
+                    if (!cPizza.isSelected() && !cBurger.isSelected() && !cFries.isSelected() && !cSoftDrinks.isSelected() && !cTea.isSelected() && !cSundae.isSelected()) {
+                        throw new IllegalArgumentException();
                     }
-                        double totalPrice = 0;double discount = 0;
+
                     if (cPizza.isSelected()) {
                         totalPrice += 100;
                     }
@@ -70,6 +69,7 @@ public class FoodOrderGUI extends JFrame{
                     if (cSundae.isSelected()) {
                         totalPrice += 40;
                     }
+
                     if (rb5.isSelected()) {
                         discount = totalPrice * 0.05;
                     } else if (rb10.isSelected()) {
@@ -80,7 +80,9 @@ public class FoodOrderGUI extends JFrame{
                     amount = totalPrice - discount;
                     JOptionPane.showMessageDialog(null, "The total price is Php " + String.format("%.2f", amount));
                 } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Invalid order! Please select at least one food item.", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Unknown Error!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });

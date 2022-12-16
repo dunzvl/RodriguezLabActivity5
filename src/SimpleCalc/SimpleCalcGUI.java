@@ -2,7 +2,6 @@ package SimpleCalc;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Objects;
 
 public class SimpleCalcGUI extends JFrame{
     private JPanel panel1;
@@ -41,15 +40,28 @@ public class SimpleCalcGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent ae) {
                 try {
-                    if(tfNumber1.getText().isEmpty() || tfNumber2.getText().isEmpty()){
-                        throw new IllegalArgumentException("Fields cannot be empty!");
+                    if(tfNumber1.getText().isEmpty() || tfNumber2.getText().isEmpty()) {
+                        throw new IllegalArgumentException();
+                    }
+                    int n1Index = (tfNumber1.getText()).length() - 1;
+                    String n1Text = tfNumber1.getText();
+                    if(Character.isLetter(n1Text.charAt(n1Index))){
+                        throw new NumberFormatException();
+                    }
+                    int n2Index = (tfNumber2.getText()).length() - 1;
+                    String n2Text = tfNumber2.getText();
+                    if(Character.isLetter(n2Text.charAt(n2Index))){
+                        throw new NumberFormatException();
                     }
                     double number1 = Double.parseDouble(tfNumber1.getText());
                     double number2 = Double.parseDouble(tfNumber2.getText());
                     String operator = (String) cbOperations.getSelectedItem();
+                    if(operator == null){
+                        operator = "+";
+                    }
                     double result = 0;
 
-                    switch (Objects.requireNonNull(operator)) {
+                    switch (operator) {
                         case "+":
                             result = number1 + number2;
                             break;
@@ -61,14 +73,20 @@ public class SimpleCalcGUI extends JFrame{
                             break;
                         case "/":
                             result = number1 / number2;
+                            if(number2 == 0){
+                                throw new ArithmeticException();
+                            }
                             break;
                     }
-
                     tfResult.setText(String.format("%.6f", result));
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(null, "Fields must only contain valid numbers!", "Error", JOptionPane.ERROR_MESSAGE);
                 } catch (IllegalArgumentException ex) {
-                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Fields cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (ArithmeticException ex) {
+                    JOptionPane.showMessageDialog(null, "Cannot divide by zero!", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Unknown Error!", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
