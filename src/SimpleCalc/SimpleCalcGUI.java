@@ -2,6 +2,7 @@ package SimpleCalc;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Objects;
 
 public class SimpleCalcGUI extends JFrame{
     private JPanel panel1;
@@ -39,27 +40,36 @@ public class SimpleCalcGUI extends JFrame{
         btnCompute.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                double number1 = Double.parseDouble(tfNumber1.getText());
-                double number2 = Double.parseDouble(tfNumber2.getText());
-                String operator = (String) cbOperations.getSelectedItem();
-                double result = 0;
+                try {
+                    if(tfNumber1.getText().isEmpty() || tfNumber2.getText().isEmpty()){
+                        throw new IllegalArgumentException("Fields cannot be empty!");
+                    }
+                    double number1 = Double.parseDouble(tfNumber1.getText());
+                    double number2 = Double.parseDouble(tfNumber2.getText());
+                    String operator = (String) cbOperations.getSelectedItem();
+                    double result = 0;
 
-                switch (operator) {
-                    case "+":
-                        result = number1 + number2;
-                        break;
-                    case "-":
-                        result = number1 - number2;
-                        break;
-                    case "*":
-                        result = number1 * number2;
-                        break;
-                    case "/":
-                        result = number1 / number2;
-                        break;
+                    switch (Objects.requireNonNull(operator)) {
+                        case "+":
+                            result = number1 + number2;
+                            break;
+                        case "-":
+                            result = number1 - number2;
+                            break;
+                        case "*":
+                            result = number1 * number2;
+                            break;
+                        case "/":
+                            result = number1 / number2;
+                            break;
+                    }
+
+                    tfResult.setText(String.format("%.6f", result));
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Fields must only contain valid numbers!", "Error", JOptionPane.ERROR_MESSAGE);
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-
-                tfResult.setText(String.format("%.6f", result));
             }
         });
     }
