@@ -3,7 +3,6 @@ package FoodOrdering;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
 
 public class FoodOrderGUI extends JFrame{
     private JPanel panel1;
@@ -47,31 +46,42 @@ public class FoodOrderGUI extends JFrame{
         btnOrder.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                double totalPrice = 0, discount = 0, amount;
-                if(cPizza.isSelected()){
-                    totalPrice+=100;
-                } if(cBurger.isSelected()){
-                    totalPrice+=80;
-                } if(cFries.isSelected()){
-                    totalPrice+=65;
-                } if(cSoftDrinks.isSelected()){
-                    totalPrice+=55;
-                } if(cTea.isSelected()){
-                    totalPrice+=50;
-                } if(cSundae.isSelected()){
-                    totalPrice+=40;
+                try {
+                    double amount;
+                    if (!cPizza.isSelected() && !cBurger.isSelected() && !cFries.isSelected() && !cSoftDrinks.isSelected() && !cTea.isSelected() && !cSundae.isSelected()){
+                        throw new IllegalArgumentException("Please select at least one food item.");
+                    }
+                        double totalPrice = 0;double discount = 0;
+                    if (cPizza.isSelected()) {
+                        totalPrice += 100;
+                    }
+                    if (cBurger.isSelected()) {
+                        totalPrice += 80;
+                    }
+                    if (cFries.isSelected()) {
+                        totalPrice += 65;
+                    }
+                    if (cSoftDrinks.isSelected()) {
+                        totalPrice += 55;
+                    }
+                    if (cTea.isSelected()) {
+                        totalPrice += 50;
+                    }
+                    if (cSundae.isSelected()) {
+                        totalPrice += 40;
+                    }
+                    if (rb5.isSelected()) {
+                        discount = totalPrice * 0.05;
+                    } else if (rb10.isSelected()) {
+                        discount = totalPrice * 0.1;
+                    } else if (rb15.isSelected()) {
+                        discount = totalPrice * 0.15;
+                    }
+                    amount = totalPrice - discount;
+                    JOptionPane.showMessageDialog(null, "The total price is Php " + String.format("%.2f", amount));
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
-                if (rb5.isSelected()) {
-                    discount = totalPrice*0.05;
-                } else if(rb10.isSelected()){
-                    discount = totalPrice*0.1;
-                } else if(rb15.isSelected()){
-                    discount = totalPrice*0.15;
-                }
-                amount = totalPrice - discount;
-                DecimalFormat df = new DecimalFormat("#.00");
-                String finalAmount = df.format(amount);
-                JOptionPane.showMessageDialog(null,"The total price is Php " + finalAmount);
             }
         });
     }
